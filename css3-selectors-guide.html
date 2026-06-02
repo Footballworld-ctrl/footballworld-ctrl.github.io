@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSS3 선택자 인터랙티브 가이드</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Fira+Code:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0c0c10;
+      --surface: #16161e;
+      --border: #2a2a3a;
+      --accent: #e8ff47;
+      --accent2: #47c8ff;
+      --accent3: #ff6b6b;
+      --text: #e4e4f0;
+      --muted: #6b6b85;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px 80px;
+    }
+
+    /* ── 헤더 ── */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    header .label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      letter-spacing: 4px;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 14px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.3s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── 그리드 ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── 카드 ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.5s forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.35s; }
+    .card:nth-child(2) { animation-delay: 0.45s; }
+    .card:nth-child(3) { animation-delay: 0.55s; }
+    .card:nth-child(4) { animation-delay: 0.65s; }
+    .card:nth-child(5) { animation-delay: 0.75s; }
+    .card:nth-child(6) { animation-delay: 0.85s; }
+
+    .card-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--accent);
+      line-height: 1;
+      min-width: 36px;
+    }
+    .card-title-wrap h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .card-title-wrap .selector-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--accent2);
+      background: rgba(71,200,255,0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .card-body {
+      padding: 20px 24px;
+    }
+    .desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    /* ── 코드 블록 ── */
+    .code-block {
+      background: #0a0a0f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #cdd6f4;
+      line-height: 1.8;
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .code-block .kw  { color: #cba6f7; }
+    .code-block .sel { color: var(--accent2); }
+    .code-block .prop{ color: #89dceb; }
+    .code-block .val { color: var(--accent); }
+    .code-block .cmt { color: var(--muted); font-style: italic; }
+
+    /* ── 실행 영역 ── */
+    .demo-area {
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+    }
+    .demo-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    /* ────────────────────────────────────────
+       ① :hover  실행 예제
+    ──────────────────────────────────────── */
+    .demo-hover-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
+    }
+    .demo-hover-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    /* ────────────────────────────────────────
+       ② :nth-child()  실행 예제
+    ──────────────────────────────────────── */
+    .nth-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .nth-list li {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: background 0.2s, color 0.2s;
+    }
+    .nth-list li:nth-child(odd) {
+      background: rgba(232,255,71,0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ────────────────────────────────────────
+       ③ ::before / ::after  실행 예제
+    ──────────────────────────────────────── */
+    .pseudo-quote {
+      position: relative;
+      padding: 14px 20px 14px 40px;
+      background: rgba(71,200,255,0.05);
+      border-left: 3px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .pseudo-quote::before {
+      content: '\201C';
+      position: absolute;
+      left: 10px;
+      top: 6px;
+      font-size: 2.2rem;
+      color: var(--accent2);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+    .pseudo-quote::after {
+      content: ' — CSS3 가상 요소';
+      display: block;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* ────────────────────────────────────────
+       ④ :not()  실행 예제
+    ──────────────────────────────────────── */
+    .not-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .not-tags span {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-family: 'Fira Code', monospace;
+    }
+    .not-tags span:not(.active) {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .not-tags span.active {
+      background: var(--accent3);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ────────────────────────────────────────
+       ⑤ [attr]  실행 예제
+    ──────────────────────────────────────── */
+    .attr-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .attr-inputs input {
+      background: #0a0a0f;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .attr-inputs input[required] {
+      border-color: var(--accent3);
+    }
+    .attr-inputs input[disabled] {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .attr-inputs input:focus {
+      border-color: var(--accent2);
+    }
+    .attr-hint {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .attr-hint span { color: var(--accent3); }
+
+    /* ────────────────────────────────────────
+       ⑥ :focus-within  실행 예제
+    ──────────────────────────────────────── */
+    .fw-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .fw-form:focus-within {
+      border-color: var(--accent);
+      background: rgba(232,255,71,0.04);
+    }
+    .fw-form label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: 'Fira Code', monospace;
+    }
+    .fw-form:focus-within label {
+      color: var(--accent);
+    }
+    .fw-form input {
+      background: #0a0a0f;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: var(--text);
+      outline: none;
+    }
+    .fw-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'Fira Code', monospace;
+      margin-top: 4px;
+    }
+    .fw-form:focus-within + .fw-hint {
+      color: var(--accent);
+    }
+
+    /* ── 푸터 ── */
+    footer {
+      text-align: center;
+      margin-top: 72px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    footer span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="label">// Interactive Guide</div>
+  <h1>CSS3 선택자</h1>
+  <p>6가지 핵심 선택자를 코드와 함께 직접 확인하세요</p>
+</header>
+
+<div class="grid">
+
+  <!-- ① :hover -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">01</span>
+      <div class="card-title-wrap">
+        <h2>Hover 선택자</h2>
+        <span class="selector-code">:hover</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        요소에 마우스를 올렸을 때 스타일을 적용합니다.
+        클릭 없이도 시각적 피드백을 줄 수 있어 버튼, 링크, 카드 등에 광범위하게 사용됩니다.
+      </p>
+      <div class="code-block">
+<span class="sel">.btn</span>:<span class="kw">hover</span> {<br>
+&nbsp;&nbsp;<span class="prop">background</span>: <span class="val">#e8ff47</span>;<br>
+&nbsp;&nbsp;<span class="prop">color</span>: <span class="val">#000</span>;<br>
+&nbsp;&nbsp;<span class="prop">transform</span>: <span class="val">translateY(-2px)</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ 직접 해보기</div>
+        <button class="demo-hover-btn">버튼에 마우스를 올려보세요</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② :nth-child() -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">02</span>
+      <div class="card-title-wrap">
+        <h2>N번째 자식 선택자</h2>
+        <span class="selector-code">:nth-child()</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        부모 요소 내에서 순번에 따라 특정 자식을 선택합니다.
+        <code style="font-family:'Fira Code';font-size:0.8em;color:var(--accent2)">odd</code> / <code style="font-family:'Fira Code';font-size:0.8em;color:var(--accent2)">even</code> 또는 수식 <code style="font-family:'Fira Code';font-size:0.8em;color:var(--accent2)">3n+1</code> 형태로 패턴 선택이 가능합니다.
+      </p>
+      <div class="code-block">
+<span class="sel">li</span>:<span class="kw">nth-child</span>(<span class="val">odd</span>) {<br>
+&nbsp;&nbsp;<span class="prop">background</span>: <span class="val">rgba(232,255,71,0.15)</span>;<br>
+&nbsp;&nbsp;<span class="prop">border-color</span>: <span class="val">#e8ff47</span>;<br>
+&nbsp;&nbsp;<span class="prop">color</span>: <span class="val">#e8ff47</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ 홀수(odd) 항목 강조</div>
+        <ul class="nth-list">
+          <li>1</li><li>2</li><li>3</li><li>4</li>
+          <li>5</li><li>6</li><li>7</li><li>8</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ ::before / ::after -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">03</span>
+      <div class="card-title-wrap">
+        <h2>가상 요소 선택자</h2>
+        <span class="selector-code">::before / ::after</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        HTML을 수정하지 않고도 요소의 앞(before) 또는 뒤(after)에 콘텐츠를 삽입합니다.
+        장식적 요소나 아이콘을 CSS만으로 구현할 때 강력합니다.
+      </p>
+      <div class="code-block">
+<span class="sel">.quote</span>::<span class="kw">before</span> {<br>
+&nbsp;&nbsp;<span class="prop">content</span>: <span class="val">'\201C'</span>; <span class="cmt">/* " */</span><br>
+&nbsp;&nbsp;<span class="prop">font-size</span>: <span class="val">2.2rem</span>;<br>
+&nbsp;&nbsp;<span class="prop">color</span>: <span class="val">#47c8ff</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ 따옴표 자동 삽입</div>
+        <div class="pseudo-quote">가상 요소로 HTML 없이 콘텐츠를 추가할 수 있습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ :not() -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">04</span>
+      <div class="card-title-wrap">
+        <h2>부정 선택자</h2>
+        <span class="selector-code">:not()</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        괄호 안의 조건에 해당하지 않는 요소만 선택합니다.
+        특정 클래스를 제외한 나머지 요소에 스타일을 적용할 때 매우 유용합니다.
+      </p>
+      <div class="code-block">
+<span class="sel">span</span>:<span class="kw">not</span>(<span class="val">.active</span>) {<br>
+&nbsp;&nbsp;<span class="prop">background</span>: <span class="val">rgba(255,255,255,0.04)</span>;<br>
+&nbsp;&nbsp;<span class="prop">color</span>: <span class="val">var(--muted)</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ .active 제외 흐리게 표시</div>
+        <div class="not-tags">
+          <span>HTML</span>
+          <span class="active">CSS3</span>
+          <span>JavaScript</span>
+          <span>React</span>
+          <span>Vue</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ [attr] 속성 선택자 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">05</span>
+      <div class="card-title-wrap">
+        <h2>속성 선택자</h2>
+        <span class="selector-code">[attr] / [attr="val"]</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        HTML 속성의 유무 또는 값에 따라 요소를 선택합니다.
+        <code style="font-family:'Fira Code';font-size:0.8em;color:var(--accent2)">[required]</code>, <code style="font-family:'Fira Code';font-size:0.8em;color:var(--accent2)">[type="email"]</code> 등 폼 요소 스타일링에 특히 강력합니다.
+      </p>
+      <div class="code-block">
+<span class="sel">input</span>[<span class="prop">required</span>] {<br>
+&nbsp;&nbsp;<span class="prop">border-color</span>: <span class="val">#ff6b6b</span>;<br>
+}<br>
+<span class="sel">input</span>[<span class="prop">disabled</span>] {<br>
+&nbsp;&nbsp;<span class="prop">opacity</span>: <span class="val">0.35</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ 속성별 스타일 차이 확인</div>
+        <div class="attr-inputs">
+          <input type="text" placeholder="일반 입력 필드" />
+          <input type="text" placeholder="필수 입력 (required)" required />
+          <input type="text" placeholder="비활성화 (disabled)" disabled />
+        </div>
+        <p class="attr-hint"><span>빨간 테두리</span> = [required] 속성 적용</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ :focus-within -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-num">06</span>
+      <div class="card-title-wrap">
+        <h2>포커스-내부 선택자</h2>
+        <span class="selector-code">:focus-within</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <p class="desc">
+        자식 요소 중 하나라도 포커스를 받으면 부모 요소에 스타일을 적용합니다.
+        폼 그룹 전체를 활성화 상태로 시각화할 때 JavaScript 없이 구현 가능합니다.
+      </p>
+      <div class="code-block">
+<span class="sel">.form</span>:<span class="kw">focus-within</span> {<br>
+&nbsp;&nbsp;<span class="prop">border-color</span>: <span class="val">#e8ff47</span>;<br>
+&nbsp;&nbsp;<span class="prop">background</span>: <span class="val">rgba(232,255,71,0.04)</span>;<br>
+}
+      </div>
+      <div class="demo-area">
+        <div class="demo-label">▶ 입력창 클릭 시 박스 전체 활성화</div>
+        <div class="fw-form">
+          <label>이름</label>
+          <input type="text" placeholder="입력하면 박스 테두리가 바뀝니다" />
+          <label>이메일</label>
+          <input type="email" placeholder="여기를 클릭해도 됩니다" />
+        </div>
+        <p class="fw-hint">※ 입력 필드에 포커스를 주면 부모 박스가 강조됩니다</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.grid -->
+
+<footer>
+  <p>CSS3 선택자 가이드 &nbsp;|&nbsp; <span>:hover</span> · <span>:nth-child</span> · <span>::before/after</span> · <span>:not</span> · <span>[attr]</span> · <span>:focus-within</span></p>
+</footer>
+
+</body>
+</html>
