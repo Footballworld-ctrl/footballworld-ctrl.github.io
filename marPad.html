@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Margin vs Padding</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; padding: 40px; color: #222; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    p.sub { color: #666; font-size: 0.85rem; margin-bottom: 32px; }
+
+    .row { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
+
+    .box-wrap { background: #dbeafe; padding: 24px; border-radius: 10px; }
+    .box {
+      background: #3b82f6;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    /* margin 예시 */
+    .m-none  { margin: 0; padding: 12px; }
+    .m-sm    { margin: 12px; padding: 12px; }
+    .m-lg    { margin: 28px; padding: 12px; }
+
+    /* padding 예시 */
+    .p-none  { padding: 4px 12px; }
+    .p-sm    { padding: 14px 24px; }
+    .p-lg    { padding: 28px 48px; }
+
+    /* 방향별 예시 */
+    .dir-wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+    .dir-box {
+      background: #10b981;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .mt { margin-top: 30px; padding: 10px 16px; }
+    .mr { margin-right: 40px; padding: 10px 16px; }
+    .mb { margin-bottom: 30px; padding: 10px 16px; }
+    .ml { margin-left: 40px; padding: 10px 16px; }
+    .pt { padding-top: 30px; padding-right: 16px; padding-bottom: 10px; padding-left: 16px; }
+    .pr { padding-top: 10px; padding-right: 40px; padding-bottom: 10px; padding-left: 16px; }
+    .pb { padding-top: 10px; padding-right: 16px; padding-bottom: 30px; padding-left: 16px; }
+    .pl { padding-top: 10px; padding-right: 16px; padding-bottom: 10px; padding-left: 40px; }
+
+    h2 { font-size: 1rem; margin-bottom: 10px; color: #444; }
+    .label { font-size: 0.75rem; color: #888; text-align: center; margin-top: 6px; }
+
+    table { border-collapse: collapse; font-size: 0.85rem; background: #fff;
+            border-radius: 10px; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,.07); }
+    th { background: #1e293b; color: #fff; padding: 10px 18px; text-align: left; }
+    td { padding: 9px 18px; border-bottom: 1px solid #f0f0f0; }
+    tr:last-child td { border: none; }
+    .y { color: #16a34a; font-weight: 600; }
+    .n { color: #dc2626; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<h1>Margin vs Padding</h1>
+<p class="sub">margin = 요소 바깥 여백 &nbsp;|&nbsp; padding = 요소 안쪽 여백</p>
+
+<!-- Margin -->
+<h2>📦 Margin — 요소 바깥 여백 (파란 배경이 부모)</h2>
+<div class="row">
+  <div>
+    <div class="box-wrap"><div class="box m-none">margin: 0</div></div>
+    <p class="label">margin: 0</p>
+  </div>
+  <div>
+    <div class="box-wrap"><div class="box m-sm">margin: 12px</div></div>
+    <p class="label">margin: 12px</p>
+  </div>
+  <div>
+    <div class="box-wrap"><div class="box m-lg">margin: 28px</div></div>
+    <p class="label">margin: 28px</p>
+  </div>
+</div>
+
+<!-- Padding -->
+<h2>🔲 Padding — 요소 안쪽 여백 (박스 자체가 커짐)</h2>
+<div class="row">
+  <div>
+    <div class="box-wrap"><div class="box p-none">padding 최소</div></div>
+    <p class="label">padding: 4px 12px</p>
+  </div>
+  <div>
+    <div class="box-wrap"><div class="box p-sm">padding 중간</div></div>
+    <p class="label">padding: 14px 24px</p>
+  </div>
+  <div>
+    <div class="box-wrap"><div class="box p-lg">padding 크게</div></div>
+    <p class="label">padding: 28px 48px</p>
+  </div>
+</div>
+
+<!-- 방향별 -->
+<h2>🧭 방향별 예시 (top / right / bottom / left)</h2>
+<div class="row">
+  <div>
+    <p class="label" style="margin-bottom:8px">margin 방향별</p>
+    <div class="dir-wrap">
+      <div><div class="dir-box mt">mt</div><p class="label">margin-top</p></div>
+      <div><div class="dir-box mr">mr</div><p class="label">margin-right</p></div>
+      <div><div class="dir-box mb">mb</div><p class="label">margin-bottom</p></div>
+      <div><div class="dir-box ml">ml</div><p class="label">margin-left</p></div>
+    </div>
+  </div>
+  <div>
+    <p class="label" style="margin-bottom:8px">padding 방향별</p>
+    <div class="dir-wrap">
+      <div><div class="dir-box pt">pt</div><p class="label">padding-top</p></div>
+      <div><div class="dir-box pr">pr</div><p class="label">padding-right</p></div>
+      <div><div class="dir-box pb">pb</div><p class="label">padding-bottom</p></div>
+      <div><div class="dir-box pl">pl</div><p class="label">padding-left</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 비교표 -->
+<h2>📊 비교</h2>
+<table>
+  <thead><tr><th>특성</th><th>Margin</th><th>Padding</th></tr></thead>
+  <tbody>
+    <tr><td>위치</td><td>테두리 바깥</td><td>테두리 안쪽</td></tr>
+    <tr><td>배경색 적용</td><td class="n">✘ 투명</td><td class="y">✔ 배경색 채워짐</td></tr>
+    <tr><td>클릭 영역 포함</td><td class="n">✘</td><td class="y">✔</td></tr>
+    <tr><td>음수 값</td><td class="y">✔ 가능</td><td class="n">✘ 불가</td></tr>
+    <tr><td>auto 사용</td><td class="y">✔ (중앙 정렬 등)</td><td class="n">✘</td></tr>
+    <tr><td>상하 겹침(collapse)</td><td class="y">✔ 발생</td><td class="n">✘ 없음</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>
